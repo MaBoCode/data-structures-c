@@ -2,18 +2,14 @@
 // Created by matt on 5/15/20.
 //
 
-#ifndef HASH_TABLE_HASHMAP_H
-#define HASH_TABLE_HASHMAP_H
-
-#define MAX_SIZE 1024
+#ifndef HASHMAP_H
+#define HASHMAP_H
 
 typedef struct Entry {
     int key;
     int value;
     struct Entry *next;
 } Entry;
-
-//Entry default_entry = {.next = NULL};
 
 typedef struct {
     int size;
@@ -28,4 +24,4 @@ Entry* get(HashMap* map, int key);
 
 void printMap(HashMap* map);
 
-#endif //HASH_TABLE_HASHMAP_H
+#endif //HASHMAP_H

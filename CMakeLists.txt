@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(hash_table C)
+project(data-structures-c C)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -26,3 +26,5 @@ add_executable(hashtable
         hashtable/hashtable.h
         hashtable/hashtable.c
         hashtable/test_hashtable.c)
+
+target_link_libraries(hashtable m)

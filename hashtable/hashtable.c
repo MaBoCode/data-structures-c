@@ -2,122 +2,117 @@
 // Created by Matthias Brown Marie on 28/04/2020.
 //
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "hashtable.h"
 
-HashTable *create_table_int(int size) {
-    HashTable* table = (HashTable*) malloc(sizeof(HashTable));
+ht_item *ht_create_item(char *key, char* data) {
+    ht_item *item = (ht_item*) malloc(sizeof(ht_item));
 
-    if(table == NULL) {
-        fprintf(stderr, "Couldn't allocate memory for table.\n");
+    if(item == NULL) {
+        fprintf(stderr, "Couldn't allocate memory for item\n");
         exit(1);
     }
-
-    table->size = size;
-    table->items = (void **) calloc(size, sizeof(ItemInt));
-
-    return table;
+    /*
+    size_t key_length = sizeof(key);
+    item->key = (char*) malloc(key_length);
+    memcpy(item->key, key, key_length);
+     */
+    item->key = strdup(key);
+    item->data = strdup(data);
+    return item;
 }
 
-HashTable *create_table_str(int size) {
-    HashTable* table = (HashTable*) malloc(sizeof(HashTable));
+ht_table *ht_create_table(int capacity) {
+    ht_table *table = (ht_table*) malloc(sizeof(ht_table));
+    table->capacity = capacity;
+    table->size = 0;
+    table->items = calloc(table->capacity, sizeof(ht_item*));
+}
 
-    if(table == NULL) {
-        fprintf(stderr, "Couldn't allocate memory for table.\n");
-        exit(1);
+/**
+ * Polynomial rolling hash function
+ * Formula: sum( (s[i] - 'a' + 1) * p^i) % m from i = 0 to n -1
+ * where s is the key, p is a prime number greater than the input alphabet
+ * m is the capacity of the table, n is the length of the key
+ * The choosen alphabet is all lowercase letters
+ * @param table
+ * @param key
+ * @return the hash
+ */
+int ht_get_hash(int capacity, char *key) {
+    int p = 29;
+    int m = capacity;
+    int hash = 0;
+
+    for(int i = 0; i < strlen(key); i++) {
+        hash += (key[i] - 'a' + 1) * (int) pow(p, i);
     }
-
-    table->size = size;
-    table->items = (void **) calloc(size, sizeof(ItemStr));
-
-    return table;
+    return hash % m;
 }
 
-int get_hash(int key) {
-    return key % SIZE;
-}
+void ht_put(ht_table *table, char *key, char *data) {
+    ht_item* item = ht_create_item(key, data);
 
-void put_int(HashTable* table, int key, int data) {
-    ItemInt* item = (ItemInt*) malloc(sizeof(ItemInt));
-    item->key = key;
-    item->data = data;
-
-    int index = get_hash(key);
+    int index = ht_get_hash(table->capacity, key);
 
     while (table->items[index] != NULL) {
         ++index;
-        index %= table->size;
+        index %= table->capacity;
     }
 
     table->items[index] = item;
+    table->size++;
 }
 
-void put_str(HashTable *table, int key, char *data) {
-    ItemStr* item = (ItemStr*) malloc(sizeof(ItemStr));
-    item->key = key;
-    item->data = data;
+ht_item *ht_get(ht_table *table, char *key) {
+    int index = ht_get_hash(table->capacity, key);
+    ht_item* item = table->items[index];
 
-    int index = get_hash(key);
-
-    while (table->items[index] != NULL) {
+    while (item != NULL) {
+        if(strcmp(item->key, key) == 0)
+            return item;
         ++index;
-        index %= table->size;
-    }
-
-    table->items[index] = item;
-}
-
-void* get(HashTable* table, int key) {
-    int index = get_hash(key);
-
-    while (table->items[index] != NULL) {
-        if(((ItemInt*)(table->items[index]))->key == key)
-            return table->items[index];
-        ++index;
-        index %= table->size;
+        index %= table->capacity;
+        item = table->items[index];
     }
     return NULL;
 }
 
-ItemInt* delete_int(HashTable* table, ItemInt* item) {
-    int index = get_hash(item->key);
+void ht_delete(ht_table *table, char *key) {
+    ht_item *item = ht_get(table, key);
 
-    while (table->items[index] != NULL) {
-        ItemInt* current_item = (ItemInt*) table->items[index];
-
-        if(current_item->key == item->key) {
-            table->items[index] = NULL;
-            table->size--;
-            return current_item;
-        }
+    if(item != NULL) {
+        ht_delete_item(table, item);
     }
-    return NULL;
 }
 
-int containsKey(HashTable* table, int key) {
-    int index = get_hash(key);
+void ht_delete_item(ht_table* table, ht_item *item) {
+    free(item->key);
+    free(item->data);
+    free(item);
+    table->size--;
+}
 
-    while (table->items[index] != NULL) {
-        ItemInt* current_item = (ItemInt*) table->items[index];
-        if(current_item->key == key)
-            return 0;
-        ++index;
-        index %= table->size;
+void ht_delete_table(ht_table *table) {
+    for(int i = 0; i < table->size; i++) {
+        ht_item *item = table->items[i];
+        if(item != NULL)
+            ht_delete_item(table, item);
     }
 
-    return 1;
+    free(table->items);
+    free(table);
 }
 
-void print_item_int(ItemInt* item) {
-    printf("key = %d, data = %d\n", item->key, item->data);
+void ht_print_item(ht_table *table, char *key) {
+    ht_item *item = ht_get(table, key);
+    printf("key = %s, data = %s\n", item->key, item->data);
 }
 
-void print_item_str(ItemStr* item) {
-    printf("key = %d, data = %s\n", item->key, item->data);
-}
-
-void print_table(HashTable* table) {
-    for (int i = 0; i < table->size; ++i) {
-        print_item_str(table->items[i]);
+void ht_print_table(ht_table *table) {
+    for (int i = 0; i < table->capacity; i++) {
+        printf("%s\n", table->items[i]->data);
     }
 }
