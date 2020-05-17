@@ -21,19 +21,22 @@ int* letter_occur(char* string) {
 
 int main(void) {
 
-    char* value1 = "test";
-    char* value2 = "test2";
-    char* value3 = "test3";
+    char* key1 = "key";
+    char* key2 = "akey";
+    char* key3 = "anotherkey";
 
-    HashTable* table = create_table_str(5);
+    char* value1 = "value";
+    char* value2 = "avalue";
+    char* value3 = "anothervalue";
 
-    put_str(table, 0, value1);
-    put_str(table, 1, value2);
-    put_str(table, 1, value3);
+    ht_table *table = ht_create_table(53);
 
-    print_table(table);
+    ht_put(table, key1, value1);
+    ht_put(table, key2, value2);
+    ht_put(table, key3, value3);
 
-    free(table);
+    ht_print_table(table);
 
+    ht_delete_table(table);
     return 0;
 }

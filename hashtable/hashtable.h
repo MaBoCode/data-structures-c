@@ -2,40 +2,32 @@
 // Created by Matthias Brown Marie on 28/04/2020.
 //
 
-#ifndef HASH_TABLE_HASHTABLE_H
-#define HASH_TABLE_HASHTABLE_H
-
-#define SIZE 20
+#ifndef HASHTABLE_H
+#define HASHTABLE_H
 
 typedef struct {
-    int key;
-    int data;
-} ItemInt;
-
-typedef struct {
-    int key;
+    char* key;
     char* data;
-} ItemStr;
+} ht_item;
 
 typedef struct {
+    int capacity;
     int size;
-    void **items;
-} HashTable;
+    ht_item **items;
+} ht_table;
 
-HashTable* create_table_int(int size);
-HashTable* create_table_str(int size);
+ht_item *ht_create_item(char *key, char *data);
+ht_table *ht_create_table(int capacity);
 
-int get_hash(int key);
+int ht_get_hash(int capacity, char *key);
 
-void put_int(HashTable* table, int key, int data);
-void put_str(HashTable* table, int key, char* data);
+void ht_put(ht_table* table, char *key, char* data);
+ht_item *ht_get(ht_table* table, char *key);
 
-void* get(HashTable* table, int key);
+void ht_delete(ht_table *table, char *key);
+void ht_delete_item(ht_table *table, ht_item *item);
+void ht_delete_table(ht_table *table);
 
-ItemInt* delete_int(HashTable* table, ItemInt* item);
-
-void print_item_int(ItemInt *item);
-void print_item_str(ItemStr* item);
-
-void print_table(HashTable* table);
-#endif //HASH_TABLE_HASHTABLE_H
+void ht_print_item(ht_table *table, char *key);
+void ht_print_table(ht_table *table);
+#endif //HASHTABLE_H
