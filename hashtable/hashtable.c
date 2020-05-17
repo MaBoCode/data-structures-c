@@ -30,7 +30,12 @@ ht_table *ht_create_table(int capacity) {
     }
     table->capacity = capacity;
     table->size = 0;
-    table->items = calloc(table->capacity, sizeof(ht_item*));
+    table->items = malloc(sizeof(ht_item*) * table->capacity);
+
+    for(int i = 0; i < table->capacity; i++)
+        table->items[i] = NULL;
+
+    return table;
 }
 
 /**
@@ -47,9 +52,10 @@ unsigned int ht_get_hash(int capacity, const char *key) {
     int p = 37;
     int m = capacity;
     unsigned long int hash = 0;
+    unsigned int key_length = strlen(key);
 
-    for(int i = 0; i < strlen(key); i++) {
-        hash += key[i] * (int) pow(p, i);
+    for(int i = 0; i < key_length; ++i) {
+        hash += (key[i] * (int) pow(p, i)) ;
     }
     return hash % m;
 }
@@ -61,32 +67,45 @@ void ht_put(ht_table *table, const char *key, const char *data) {
 
     if(item == NULL) {
         table->items[index] = ht_create_item(key, data);
+        table->size++;
         return;
     }
 
-    
-}
-
-ht_item *ht_get(ht_table *table, char *key) {
-    int index = ht_get_hash(table->capacity, key);
-    ht_item* item = table->items[index];
+    ht_item *prev_item = NULL;
 
     while (item != NULL) {
-        if(strcmp(item->key, key) == 0)
-            return item;
-        ++index;
-        index %= table->capacity;
-        item = table->items[index];
+        if(strcmp(item->key, key) == 0) {
+            free(item->data);
+            item->data = strdup(data);
+            return;
+        }
+
+        prev_item = item;
+        item = prev_item->next;
     }
-    return NULL;
+
+    //Handling hash collisions
+    prev_item->next = ht_create_item(key, data);
+    table->size++;
 }
 
-void ht_delete(ht_table *table, char *key) {
-    ht_item *item = ht_get(table, key);
+char *ht_get(ht_table *table, const char *key) {
+    unsigned int index = ht_get_hash(table->capacity, key);
 
-    if(item != NULL) {
-        ht_delete_item(table, item);
+    ht_item *item = table->items[index];
+
+    if(item == NULL) {
+        return NULL;
     }
+
+    while (item != NULL) {
+        if(strcmp(item->key, key) == 0) {
+            return  item->data;
+        }
+        item = item->next;
+    }
+
+    return NULL;
 }
 
 void ht_delete_item(ht_table* table, ht_item *item) {
@@ -97,7 +116,7 @@ void ht_delete_item(ht_table* table, ht_item *item) {
 }
 
 void ht_delete_table(ht_table *table) {
-    for(int i = 0; i < table->size; i++) {
+    for(int i = 0; i < table->capacity; i++) {
         ht_item *item = table->items[i];
         if(item != NULL)
             ht_delete_item(table, item);
@@ -107,13 +126,21 @@ void ht_delete_table(ht_table *table) {
     free(table);
 }
 
-void ht_print_item(ht_table *table, char *key) {
-    ht_item *item = ht_get(table, key);
-    printf("key = %s, data = %s\n", item->key, item->data);
+void ht_print_item(ht_table *table, const char *key) {
+    char *data = ht_get(table, key);
+    printf("%s: %s\n", key, data);
 }
 
 void ht_print_table(ht_table *table) {
     for (int i = 0; i < table->capacity; i++) {
-        printf("%s\n", table->items[i]->data);
+        ht_item *item = table->items[i];
+
+        printf("[%d]: ", i);
+
+        while (item != NULL) {
+            printf("%s: %s ", item->key, item->data);
+            item = item->next;
+        }
+        printf("\n");
     }
 }

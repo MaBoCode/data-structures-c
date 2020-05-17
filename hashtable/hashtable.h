@@ -6,8 +6,8 @@
 #define HASHTABLE_H
 
 typedef struct {
-    char* key;
-    char* data;
+    char *key;
+    char *data;
     struct ht_item *next;
 } ht_item;
 
@@ -23,7 +23,7 @@ ht_table *ht_create_table(int capacity);
 unsigned int ht_get_hash(int capacity, const char *key);
 
 void ht_put(ht_table* table, const char *key, const char* data);
-ht_item *ht_get(ht_table* table, const char *key);
+char *ht_get(ht_table* table, const char *key);
 
 void ht_delete(ht_table *table, const char *key);
 void ht_delete_item(ht_table *table, ht_item *item);
