@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "hashmap/hashmap.h"
+#include "hashmap.h"
 
 int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
     HashMap* map = createHashMap(numsSize);

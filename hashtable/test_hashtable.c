@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "hashtable/hashtable.h"
+#include "hashtable.h"
 
 #define TABLE_SIZE 2069
 
