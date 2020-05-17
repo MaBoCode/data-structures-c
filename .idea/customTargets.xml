@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CLionExternalBuildManager">
+    <target id="6293fd0d-c0ea-45b7-83ef-d4b33286b4c3" name="hashtable" projectName="hash_table">
+      <configuration id="404ffdd4-975d-474d-b310-4296fd44d4a7" name="hashtable" toolchainName="Default">
+        <build type="TOOL">
+          <tool actionId="Tool_External Tools_build" />
+        </build>
+        <clean type="TOOL">
+          <tool actionId="Tool_External Tools_clean" />
+        </clean>
+      </configuration>
+    </target>
+    <target id="cde1c1a8-58c4-40ad-99a0-176ff4dfd066" name="hashmap" projectName="hash_table">
+      <configuration id="bfd3da55-aecf-4aa3-b296-51c578e6e3f7" name="hashmap">
+        <build type="TOOL">
+          <tool actionId="Tool_External Tools_build" />
+        </build>
+        <clean type="TOOL">
+          <tool actionId="Tool_External Tools_clean" />
+        </clean>
+      </configuration>
+    </target>
+  </component>
+</project>
