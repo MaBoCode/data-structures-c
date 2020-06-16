@@ -1,9 +1,19 @@
-#include "singly_linked_list.h"
+#include <stdio.h>
+#include "stack.h"
+
+void test_stack() {
+    st_stack *stack = st_create(10);
+
+    if(st_is_empty(stack)) {
+        printf("[Info] Stack is empty\n");
+    }
+
+    st_print(stack);
+}
 
 int main(void) {
 
-    sll_list *list = sll_create_list();
+    test_stack();
 
-    sll_add(list, "Test");
-    sll_print_list(list);
+    return 0;
 }
