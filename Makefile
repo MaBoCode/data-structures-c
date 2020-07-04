@@ -57,6 +57,10 @@ stack: $(BIN_PATH)/stack
 hashtable: $(BIN_PATH)/hashtable
 	@./$(BIN_PATH)/hashtable
 
+.PHONY: queue
+queue: $(BIN_PATH)/queue
+	@./$(BIN_PATH)/queue
+
 .PHONY: rebuild
 rebuild: clean all
 
