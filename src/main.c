@@ -1,9 +1,8 @@
-#include "singly_linked_list.h"
+#include "queue.h"
 
 int main(void) {
 
-    sll_list *list = sll_create_list();
+	q_queue *queue = q_create(3);
 
-    sll_add(list, "Test");
-    sll_print_list(list);
+	q_add(queue, 1);
 }
