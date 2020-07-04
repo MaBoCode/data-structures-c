@@ -46,6 +46,9 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 $(BIN_PATH)/%: $(OBJ_PATH)/%.o $(OBJ_PATH)/main.o
 	@$(CC) $(CCFLAG) $(DBGFLAG) $? -o $@
 
+$(STACK_TARGET): $(STACK_SRC)
+	$(CC) $(CCFLAG) -o $@ $<
+
 .PHONY: all
 all: $(TARGET)
 
