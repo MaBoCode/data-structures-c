@@ -17,3 +17,5 @@ int q_peek(q_queue *queue);
 int q_remove(q_queue *queue);
 
 void q_print(q_queue *queue);
+
+#endif
