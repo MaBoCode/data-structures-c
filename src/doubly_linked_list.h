@@ -22,6 +22,9 @@ dll_list* dll_create_list();
 void dll_add(dll_list* list, int data);
 void dll_add_at(dll_list* list, unsigned int index, int data);
 
+unsigned int dll_index_of(dll_list* list, int data);
+unsigned int dll_last_index_of(dll_list* list, int data);
+
 void dll_clear(dll_list* list);
 
 int dll_contains(dll_list* list, int data);

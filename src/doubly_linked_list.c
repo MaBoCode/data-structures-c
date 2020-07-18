@@ -58,6 +58,67 @@ void dll_add(dll_list* list, int data) {
 	list->size++;
 }
 
+void dll_add_at(dll_list* list, unsigned int index, int data) {
+	if (list == NULL) {
+		return;
+	}
+
+	if (index < 0 || index >= list->size) {
+		fprintf(stderr, "Index out of bounds\n");
+		return;
+	}
+
+	dll_item* item = dll_create_item(data);
+
+	dll_item* tmp = list->head;
+	dll_item* prev;
+	unsigned int counter = 0;
+
+	while (counter != index) {
+		prev = tmp;
+		tmp = tmp->next;
+		counter++;
+	}
+
+	prev->next = item;
+	item->next = tmp;
+	list->size++;
+}
+
+unsigned int dll_index_of(dll_list* list, int data) {
+	if (list == NULL) {
+		return;
+	}
+
+	dll_item* tmp = list->head;
+	unsigned int index = 0;
+
+	while (tmp->data != data) {
+		tmp = tmp->next;
+		index++;
+	}
+	return index;
+}
+
+unsigned int dll_last_index_of(dll_list* list, int data) {
+	if (list == NULL) {
+		return;
+	}
+
+	dll_item* tmp = list->head;
+	unsigned int index = -1;
+	unsigned int counter = 0;
+
+	while (tmp != NULL) {
+		if (tmp->data == data) {
+			index = counter;
+		}
+		tmp = tmp->next;
+		counter++;
+	}
+	return index;
+}
+
 int dll_contains(dll_list* list, int data) {
 	if (list == NULL) {
 		return;
@@ -66,11 +127,35 @@ int dll_contains(dll_list* list, int data) {
 	dll_item* tmp = list->head;
 
 	while (tmp != NULL) {
-		if (strcmp(tmp->data, data) == 0) {
+		if (tmp->data == data) {
 			return 0;
 		}
+		tmp = tmp->next;
 	}
 	return -1;
+}
+
+int dll_get(dll_list* list, unsigned int index) {
+	if (list == NULL) {
+		return;
+	}
+
+	if (index < 0 || index >= list->size) {
+		fprintf(stderr, "Index out of bounds\n");
+		return;
+	}
+
+	dll_item* tmp = list->head;
+	int counter = 0;
+
+	while (counter != index) {
+		tmp = tmp->next;
+		counter++;
+	}
+
+	if (tmp != NULL) {
+		return tmp->data;
+	}
 }
 
 int dll_remove(dll_list* list, unsigned int index) {
