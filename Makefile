@@ -57,6 +57,10 @@ hashtable: $(BIN_PATH)/hashtable
 queue: $(BIN_PATH)/queue
 	@./$(BIN_PATH)/queue
 
+.PHONY: binary_tree
+binary_tree: $(BIN_PATH)/binary_tree
+	@./$(BIN_PATH)/binary_tree
+
 .PHONY: rebuild
 rebuild: clean all
 
