@@ -18,10 +18,6 @@ SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
 OBJ := $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 OBJ_DEBUG := $(addprefix $(DBG_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 
-STACK_T_NAME := stack
-STACK_TARGET := $(BIN_PATH)/$(STACK_T_NAME)
-STACK_O := obj/stack.o
-
 DISTCLEAN_LIST := $(OBJ) \
                   $(OBJ_DEBUG)
 CLEAN_LIST := $(BIN) \
@@ -45,9 +41,6 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 
 $(BIN_PATH)/%: $(OBJ_PATH)/%.o $(OBJ_PATH)/main.o
 	@$(CC) $(CCFLAG) $(DBGFLAG) $? -o $@
-
-$(STACK_TARGET): $(STACK_SRC)
-	$(CC) $(CCFLAG) -o $@ $<
 
 .PHONY: all
 all: $(TARGET)
