@@ -1,5 +1,6 @@
 
 #include "binary_tree.h"
+#include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -73,8 +74,34 @@ void bt_delete(bt_tree* tree) {
 	bt_node* tmp = tree->root;
 
 	while (tmp != NULL) {
-		
+
 	}
+}
+
+void bt_bfs(bt_tree* tree) {
+	if (tree == NULL || tree->root == NULL) {
+		return NULL;
+	}
+
+	bt_node *tmp = tree->root;
+	q_queue* q = q_create(tree->size);
+	q_add(q, (void*) tmp);
+
+	while (q_is_empty(q) != 0) {
+		bt_node *front = (bt_node*) q_poll(q);
+
+		printf("%d ", front->value);
+
+		if (front->left != NULL) {
+			q_add(q, front->left);
+		}
+
+		if (front->right != NULL) {
+			q_add(q, front->right);
+		}
+	}
+	printf("\n");
+	q_free(q);
 }
 
 void bt_print_inorder(bt_node* node) {

@@ -58,7 +58,11 @@ queue: $(BIN_PATH)/queue
 	@./$(BIN_PATH)/queue
 
 .PHONY: binary_tree
-binary_tree: $(BIN_PATH)/binary_tree
+binary_tree:
+	$(OBJ_PATH)/queue.o
+	$(OBJ_PATH)/$@.o
+	$(OBJ_PATH)/main.o
+	@$(CC) $(CCFLAG) $(OBJ_PATH)/queue.o $(OBJ_PATH)/$@.o $(OBJ_PATH)/main.o  -o $(BIN_PATH)/$@
 	@./$(BIN_PATH)/binary_tree
 
 .PHONY: rebuild
