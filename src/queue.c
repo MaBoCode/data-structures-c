@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include "queue.h"
 
-q_queue *q_create(unsigned int capacity) {
-	q_queue *queue = (q_queue*) malloc(sizeof(q_queue));
+q_queue* q_create(unsigned int capacity) {
+	q_queue* queue = (q_queue*) malloc(sizeof(q_queue));
 
 	if (queue == NULL) {
 		fprintf(stderr, "Couldn't allocate memory for queue\n");
@@ -20,7 +20,7 @@ q_queue *q_create(unsigned int capacity) {
 	return queue;
 }
 
-void q_add(q_queue *queue, int value) {
+void q_add(q_queue* queue, int value) {
 	if (queue == NULL) {
 		fprintf(stderr, "Can't add to NULL queue\n");
 		return;
@@ -32,9 +32,10 @@ void q_add(q_queue *queue, int value) {
 			break;
 		}
 	}
+	queue->size++;
 }
 
-int q_peek(q_queue *queue) {
+int q_peek(q_queue* queue) {
 	if (queue == NULL) {
 		fprintf(stderr, "Can't peek to NULL queue\n");
 		return;
@@ -43,7 +44,11 @@ int q_peek(q_queue *queue) {
 	return queue->items[queue->front];
 }
 
-int q_remove(q_queue *queue) {
+int q_poll(q_queue* queue) {
+	return q_remove(queue);
+}
+
+int q_remove(q_queue* queue) {
 	if (queue == NULL) {
 		fprintf(stderr, "Can't remove to NULL queue\n");
 		return;
@@ -55,10 +60,15 @@ int q_remove(q_queue *queue) {
 		queue->items[i+1] = queue->items[i];
 	}
 	queue->items[0] = NULL;
+	queue->size--;
 	return front;
 }
 
-void q_print(q_queue *queue) {
+int q_is_empty(q_queue* queue) {
+	return queue->size;
+}
+
+void q_print(q_queue* queue) {
 
 	for (int i = 0; i < queue->capacity - 1; i++) {
 		if (queue->items[i] == NULL) {
