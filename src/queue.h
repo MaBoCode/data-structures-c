@@ -4,17 +4,22 @@
 
 typedef struct {
 	int front;
+	unsigned int size;
 	unsigned int capacity;
-	int *items;
+	void **items;
 } q_queue;
 
 q_queue *q_create(unsigned int capacity);
 
-void q_add(q_queue *queue, int value);
+void q_add(q_queue *queue, void *value);
 
-int q_peek(q_queue *queue);
+void *q_peek(q_queue *queue);
 
-int q_remove(q_queue *queue);
+void *q_poll(q_queue *queue);
+
+void *q_remove(q_queue *queue);
+
+int q_is_empty(q_queue *queue);
 
 void q_print(q_queue *queue);
 
