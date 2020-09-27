@@ -5,34 +5,37 @@
 #ifndef SINGLY_LINKED_LIST_H
 #define SINGLY_LINKED_LIST_H
 
-struct Node {
-    int  data;
-    struct Node* next;
-};
+typedef struct {
+    char *data;
+    struct sl_item *next;
+} sl_item;
 
-void push(struct Node**, int);
-void insert_after(struct Node*, int);
-void append(struct Node**, int);
+typedef struct {
+    unsigned int size;
+    sl_item *head;
+} sl_list;
 
-void delete(struct Node**, int);
-void delete_at(struct Node**, int);
-void remove_duplicates(struct Node*);
+sl_item *sl_create_item(const char *data);
+sl_list *sl_create_list();
 
-void erase(struct Node**);
+void sl_add(sl_list *list, const char *data);
+void sl_add_at(sl_list *list, unsigned int index, const char *data);
 
-int occurs(struct Node*, int);
-int rec_occurs(struct Node*, int);
+void sl_remove(sl_list *list, const char *data);
+void sl_remove_at(sl_list *list, unsigned int index);
+void sl_remove_all(sl_list *list);
 
-int length(struct Node**);
-int rec_length(struct Node*);
+char *sl_get(sl_list *list, unsigned int index);
+void sl_set(sl_list *list, unsigned int index, const char *data);
 
-int exist(struct Node*, int);
-int rec_exist(struct Node*, int);
+int sl_index_of(sl_list *list, const char *data);
+int sl_last_index_of(sl_list *list, const char *data);
 
-int get_at(struct Node*, int);
-int rec_get_at(struct Node*, int);
-int rec_get_at_helper(struct Node*, int , int);
+int sl_contains(sl_list *list, const char *data);
+int sl_is_empty(sl_list *list);
 
-void print_list(struct Node*);
+void sl_destroy(sl_list *list);
+
+void sl_print_list(sl_list *list);
 
 #endif //SINGLY_LINKED_LIST_H
